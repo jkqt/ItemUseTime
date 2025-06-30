@@ -57,30 +57,37 @@ public partial class Plugin : BaseUnityPlugin
 
         if (character != null)
         {
-            if (character.refs.items.climbingSpikeCastProgress > 0f)
-            {
-                // TODO: find better access point for climbing spike conditional
-                // Climbing Spike Use Time currently hard set at 2f (can't find a good var to access due to temporary hand slot edge case not updating .currentClimbingSpikeItemSlot)
-                // might just search the scene with find for the first climbing spike within game scene...? but highly likely to break if it checks someone else's while they're using it
-                progressCircleText.text = ((1f - useItemProgress.fill.fillAmount) * 2f).ToString("F1");
-                progressCircleText.gameObject.SetActive(true);
-            }
-            else if ((character.data.currentItem != null) && (character.data.currentItem.shouldShowCastProgress))
-            {
-                if (character.data.currentItem.isUsingSecondary) 
+            if (character.photonView.IsMine)
+            { 
+                if (character.refs.items.climbingSpikeCastProgress > 0f)
                 {
-                    progressCircleText.text = ((1f - useItemProgress.fill.fillAmount) * character.data.currentItem.totalSecondaryUsingTime).ToString("F1");
+                    // TODO: find better access point for climbing spike conditional
+                    // Climbing Spike Use Time currently hard set at 2f (can't find a good var to access due to temporary hand slot edge case not updating .currentClimbingSpikeItemSlot)
+                    // might just search the scene with find for the first climbing spike within game scene...? but highly likely to break if it checks someone else's while they're using it
+                    progressCircleText.text = ((1f - useItemProgress.fill.fillAmount) * 2f).ToString("F1");
+                    progressCircleText.gameObject.SetActive(true);
+                }
+                else if ((character.data.currentItem != null) && (character.data.currentItem.shouldShowCastProgress))
+                {
+                    if (character.data.currentItem.isUsingSecondary)
+                    {
+                        progressCircleText.text = ((1f - useItemProgress.fill.fillAmount) * character.data.currentItem.totalSecondaryUsingTime).ToString("F1");
+                    }
+                    else
+                    {
+                        progressCircleText.text = ((1f - useItemProgress.fill.fillAmount) * character.data.currentItem.usingTimePrimary).ToString("F1");
+                    }
+                    progressCircleText.gameObject.SetActive(true);
+                }
+                else if ((useItemProgress.constantUseInteractableExists) && (Interaction.instance.constantInteractableProgress > 0f))
+                {
+                    progressCircleText.text = ((1f - useItemProgress.fill.fillAmount) * Interaction.instance.currentConstantInteractableTime).ToString("F1");
+                    progressCircleText.gameObject.SetActive(true);
                 }
                 else
                 {
-                    progressCircleText.text = ((1f - useItemProgress.fill.fillAmount) * character.data.currentItem.usingTimePrimary).ToString("F1");
+                    progressCircleText.gameObject.SetActive(false);
                 }
-                progressCircleText.gameObject.SetActive(true);
-            }
-            else if ((useItemProgress.constantUseInteractableExists) && (Interaction.instance.constantInteractableProgress > 0f))
-            {
-                progressCircleText.text = ((1f - useItemProgress.fill.fillAmount) * Interaction.instance.currentConstantInteractableTime).ToString("F1");
-                progressCircleText.gameObject.SetActive(true);
             }
             else
             {
