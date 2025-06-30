@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using System;
@@ -13,10 +14,14 @@ public partial class Plugin : BaseUnityPlugin
     internal static ManualLogSource Log { get; private set; } = null!;
     private static TextMeshProUGUI progressCircleText;
     private static GUIManager guiManager;
+    private static ConfigEntry<float> configFontSize;
+    private static ConfigEntry<float> configOutlineWidth;
 
     private void Awake()
     {
         Log = Logger;
+        configFontSize = ((BaseUnityPlugin)this).Config.Bind<float>("ItemUseTime", "Font Size", 20f, "Customize the Font Size for item progress circle text.");
+        configOutlineWidth = ((BaseUnityPlugin)this).Config.Bind<float>("ItemUseTime", "Outline Width", 0.1f, "Customize the Outline Width for item progress circle text.");
         Harmony.CreateAndPatchAll(typeof(ItemUseTimeProgressUpdatePatch));
         Log.LogInfo($"Plugin {Name} is loaded!");
     }
@@ -99,7 +104,7 @@ public partial class Plugin : BaseUnityPlugin
         TextMeshProUGUI itemUseTimeText = itemUseTime.AddComponent<TextMeshProUGUI>();
         RectTransform itemUseTimeRect = itemUseTime.GetComponent<RectTransform>();
         itemUseTimeText.font = font;
-        itemUseTimeText.fontSize = 20f;
+        itemUseTimeText.fontSize = configFontSize.Value;
         itemUseTimeRect.offsetMin = new Vector2(0f, 0f);
         itemUseTimeRect.offsetMax = new Vector2(0f, 0f);
         itemUseTimeText.alignment = TextAlignmentOptions.Center;
@@ -107,6 +112,6 @@ public partial class Plugin : BaseUnityPlugin
         itemUseTimeText.textWrappingMode = TextWrappingModes.NoWrap;
         itemUseTimeText.text = "";
         progressCircleText = itemUseTimeText;
-        itemUseTimeText.outlineWidth = 0.075f;
+        itemUseTimeText.outlineWidth = configOutlineWidth.Value;
     }
 }
