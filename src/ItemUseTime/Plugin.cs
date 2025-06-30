@@ -47,7 +47,8 @@ public partial class Plugin : BaseUnityPlugin
 
     private static void updateProgressCircleText(UI_UseItemProgress useItemProgress)
     {
-        Character character = guiManager.character;
+        //Character character = guiManager.character;
+        Character character = Character.observedCharacter;
 
         if (character != null)
         {
