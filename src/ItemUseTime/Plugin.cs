@@ -60,12 +60,12 @@ public partial class Plugin : BaseUnityPlugin
             {
                 Item currItem = character.data.currentItem;
 
-                if (currItem.gameObject.TryGetComponent<RopeTier>(out RopeTier ropeTier))
+                if (currItem.isUsingPrimary && currItem.gameObject.TryGetComponent<RopeTier>(out RopeTier ropeTier))
                 {
                     itemUseTimeTextMesh.text = ((1f - useItemProgress.fill.fillAmount) * ropeTier.castTime).ToString("F1");
                     itemUseTimeTextMesh.gameObject.SetActive(true);
                 }
-                else if ((character.refs.items.climbingSpikeCastProgress > 0f) && (character.refs.items.currentClimbingSpikeComponent.gameObject.TryGetComponent<Item>(out Item climbingSpike)))
+                else if ((character.refs.items.climbingSpikeCastProgress > 0f) && character.refs.items.currentClimbingSpikeComponent.gameObject.TryGetComponent<Item>(out Item climbingSpike))
                 {
                     itemUseTimeTextMesh.text = ((1f - useItemProgress.fill.fillAmount) * climbingSpike.totalSecondaryUsingTime).ToString("F1");
                     itemUseTimeTextMesh.gameObject.SetActive(true);
@@ -106,10 +106,10 @@ public partial class Plugin : BaseUnityPlugin
     private static void InitItemUseTime()
     {
         GameObject guiManagerGameObj = GameObject.Find("GAME/GUIManager");
-        GameObject useItemGameObj = guiManagerGameObj.transform.Find("Canvas_HUD/UseItem").gameObject;
-        TMPro.TMP_FontAsset font = guiManager.heroDayText.font;
         guiManager = guiManagerGameObj.GetComponent<GUIManager>();
+        TMPro.TMP_FontAsset font = guiManager.heroDayText.font;
 
+        GameObject useItemGameObj = guiManagerGameObj.transform.Find("Canvas_HUD/UseItem").gameObject;
         GameObject itemUseTime = new GameObject("ItemUseTime");
         itemUseTime.transform.SetParent(useItemGameObj.transform);
         itemUseTimeTextMesh = itemUseTime.AddComponent<TextMeshProUGUI>();
