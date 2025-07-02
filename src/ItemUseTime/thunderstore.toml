@@ -7,8 +7,8 @@ repository = "https://thunderstore.io"
 [package]
 namespace = "jkqt"
 name = "ItemUseTime"
-description = "TODO: Fill in short mod description."
-websiteUrl = "" # TODO: Add a link to your mod repository here (optional)
+description = "Displays the remaining time for the progress circle when using an item or interacting with an object."
+websiteUrl = "https://github.com/jkqt/ItemUseTime"
 containsNsfwContent = false
 
 [package.dependencies]
