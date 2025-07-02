@@ -60,19 +60,18 @@ public partial class Plugin : BaseUnityPlugin
             {
                 Item currItem = character.data.currentItem;
 
-                if (currItem.isUsingPrimary && currItem.gameObject.TryGetComponent<RopeTier>(out RopeTier ropeTier))
-                {
-                    itemUseTimeTextMesh.text = ((1f - useItemProgress.fill.fillAmount) * ropeTier.castTime).ToString("F1");
-                    itemUseTimeTextMesh.gameObject.SetActive(true);
-                }
-                else if ((character.refs.items.climbingSpikeCastProgress > 0f) && character.refs.items.currentClimbingSpikeComponent.gameObject.TryGetComponent<Item>(out Item climbingSpike))
+                if ((character.refs.items.climbingSpikeCastProgress > 0f) && character.refs.items.currentClimbingSpikeComponent.gameObject.TryGetComponent<Item>(out Item climbingSpike))
                 {
                     itemUseTimeTextMesh.text = ((1f - useItemProgress.fill.fillAmount) * climbingSpike.totalSecondaryUsingTime).ToString("F1");
                     itemUseTimeTextMesh.gameObject.SetActive(true);
                 }
                 else if ((currItem != null) && (currItem.shouldShowCastProgress))
                 {
-                    if (currItem.isUsingSecondary)
+                    if (currItem.gameObject.TryGetComponent<RopeTier>(out RopeTier ropeTier))
+                    {
+                        itemUseTimeTextMesh.text = ((1f - useItemProgress.fill.fillAmount) * ropeTier.castTime).ToString("F1");
+                    }
+                    else if (currItem.isUsingSecondary)
                     {
                         itemUseTimeTextMesh.text = ((1f - useItemProgress.fill.fillAmount) * currItem.totalSecondaryUsingTime).ToString("F1");
                     }
