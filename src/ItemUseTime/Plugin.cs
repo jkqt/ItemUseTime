@@ -60,6 +60,7 @@ public partial class Plugin : BaseUnityPlugin
             {
                 Item currItem = character.data.currentItem;
 
+                // character.refs.items.currentClimbingSpikeComponent might be null at some point, could move trygetcomponent into a nested if statement (but it's not throwing any error rn even if null...?)
                 if ((character.refs.items.climbingSpikeCastProgress > 0f) && character.refs.items.currentClimbingSpikeComponent.gameObject.TryGetComponent<Item>(out Item climbingSpike))
                 {
                     itemUseTimeTextMesh.text = ((1f - useItemProgress.fill.fillAmount) * climbingSpike.totalSecondaryUsingTime).ToString("F1");
