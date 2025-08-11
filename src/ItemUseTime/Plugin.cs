@@ -58,7 +58,7 @@ public partial class Plugin : BaseUnityPlugin
         {
             if (character.photonView.IsMine)
             {
-                Item currItem = character.data.currentItem;
+                Item currItem = character.data.currentItem; // not sure why this broke after THE MESA update, made no changes (just rebuilt)
 
                 // character.refs.items.currentClimbingSpikeComponent might be null at some point, could move trygetcomponent into a nested if statement (but it's not throwing any error rn even if null...?)
                 if ((character.refs.items.climbingSpikeCastProgress > 0f) && character.refs.items.currentClimbingSpikeComponent.gameObject.TryGetComponent<Item>(out Item climbingSpike))
